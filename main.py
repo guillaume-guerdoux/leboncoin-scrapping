@@ -1,10 +1,13 @@
 import requests
 from leboncoin_scrapper import LeBonCoinScrapper
 
-scrapper = LeBonCoinScrapper()
-searching_page = scrapper.get_html_page(16, 1, 'Ecran ordinateur',
-                                        ['91300', '92160'], None, 6, 0)
-titles = scrapper.get_items_title(searching_page)
-dates = scrapper.get_items_date(searching_page)
-prices = scrapper.get_items_price(searching_page)
-print(titles, dates, prices)
+''' Structure of main_dict :
+        {query1 : ([category1, category2, ], max_price, in_title),
+         query2 : ([category1, category2, ], max_price, in_title)}'''
+
+main_dict = {'Ecran ordinateur': ([16, 15], 6, 1),
+             'Console PS4': ([43], 14, 1)}
+
+scrapper = LeBonCoinScrapper(main_dict, 1, ['91300', '92160'])
+
+print(scrapper.process_requests())
