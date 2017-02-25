@@ -1,5 +1,6 @@
 import requests
 from lxml import html
+from datetime import datetime
 
 
 class LeBonCoinScrapper:
@@ -88,8 +89,11 @@ class LeBonCoinScrapper:
                 address_list = self.get_items_address(html_page)
                 combination_list = []
                 for index, date in enumerate(date_list):
-                    combination_list.append((title_list[index], date,
-                                             price_list[index],
-                                             address_list[index]))
-                final_result[query].append(combination_list)
+                    if (datetime.today() -
+                            datetime.strptime(date, "%Y-%m-%d")).days <= 1:
+                        combination_list.append((title_list[index], date,
+                                                 price_list[index],
+                                                 address_list[index]))
+                if combination_list != []:
+                    final_result[query].append(combination_list)
         return final_result

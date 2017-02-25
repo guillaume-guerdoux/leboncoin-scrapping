@@ -15,19 +15,18 @@ if __name__ == "__main__":
     scrapper = LeBonCoinScrapper(main_dict, 1, ['92160'])
 
     ad_list = scrapper.process_requests()
-
     body = 'Une nouvelle anonce a été passée \n'
     for query, query_ads in ad_list.items():
         for category_ad in query_ads:
             for ad in category_ad:
-                print(ad)
                 title = ad[0]
                 price = ad[2]
                 place = ad[3]
                 body += (title + "\n" +
                          price + '€ à ' + place + '\n')
-
-    with open('config/phone_number.json') as phoneNumbers:
-        phones_numbers = json.load(phoneNumbers)
-        send_text_messages(phones_numbers[0]['destinataire'],
-                           phones_numbers[0]['expediteur'], body)
+    if body != 'Une nouvelle anonce a été passée \n':
+        print("ok")
+        '''with open('config/phone_number.json') as phoneNumbers:
+            phones_numbers = json.load(phoneNumbers)
+            send_text_messages(phones_numbers[0]['destinataire'],
+                               phones_numbers[0]['expediteur'], body)'''
