@@ -62,6 +62,17 @@ class LeBonCoinScrapper:
             price_list.append(price.strip())
         return price_list
 
+    def get_items_address(self, html_page):
+        ''' Return list of all dates in html page (from top to the bottom)'''
+
+        address_html = html_page.xpath("//section[@id='listingAds']"
+                                       "//section[@class='item_infos']"
+                                       "//meta[@itemprop='address'][1]/@content")
+        address_list = []
+        for address in address_html:
+            address_list.append(address.strip())
+        return address_list
+
     def process_requests(self):
         final_result = {}
         for query, parameters in self.main_dict.items():
@@ -74,9 +85,11 @@ class LeBonCoinScrapper:
                 title_list = self.get_items_title(html_page)
                 date_list = self.get_items_date(html_page)
                 price_list = self.get_items_price(html_page)
+                address_list = self.get_items_address(html_page)
                 combination_list = []
                 for index, date in enumerate(date_list):
                     combination_list.append((title_list[index], date,
-                                             price_list[index]))
+                                             price_list[index],
+                                             address_list[index]))
                 final_result[query].append(combination_list)
         return final_result
