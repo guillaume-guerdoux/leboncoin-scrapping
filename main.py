@@ -4,15 +4,32 @@ from leboncoin_scrapper import LeBonCoinScrapper
 from utils import *
 from twilio.rest import TwilioRestClient
 
+import numpy as np
+
 if __name__ == "__main__":
-    ''' Structure of main_dict :
+
+
+    #fast_text = np.fromfile(file='fast_text/wiki.fr.vec', count=10000000)
+    '''embedding = dict()
+    i = 0
+    with open('fast_text/wiki.fr.vec') as infile:
+        for line in infile:
+            print(i)
+            if i > 10000:
+                break
+            else:
+                word, vec_s = line.strip().split(' ', 1)
+                vec = np.array([float(v) for v in vec_s.split(' ')])
+                embedding[word] = vec
+                i += 1'''
+    '''Structure of main_dict :
             {query1 : ([category1, category2, ], max_price, in_title),
              query2 : ([category1, category2, ], max_price, in_title)}'''
 
-    main_dict = {'Ecran ordinateur': ([16, 15], 6, 1)}
+    main_dict = {'Ecran ordinateur': ([16, 15], 20, 1)}
                  #'Console PS4': ([43], 14, 1)}
 
-    scrapper = LeBonCoinScrapper(main_dict, 1, ['92160'])
+    scrapper = LeBonCoinScrapper(main_dict, 1, ['75012'])
 
     ad_list = scrapper.process_requests()
     body = 'Une nouvelle anonce a été passée \n'
@@ -24,6 +41,7 @@ if __name__ == "__main__":
                 place = ad[3]
                 body += (title + "\n" +
                          price + '€ à ' + place + '\n')
+    print(body)
     if body != 'Une nouvelle anonce a été passée \n':
         print("ok")
         '''with open('config/phone_number.json') as phoneNumbers:
